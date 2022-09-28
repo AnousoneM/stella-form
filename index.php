@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 require 'controller.php';
@@ -28,63 +29,114 @@ require 'controller.php';
     <div class="row justify-content-center">
 
         <div class="col-8">
-            <form action="" method="POST">
 
-                <div class="border rounded devis p-3">
+            <div class="border rounded devis p-3">
 
-                    <!-- Fil d'Ariane -->
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item <?= isset($_GET['step']) && $_GET['step'] == 1  ? 'active aria-current="page"' : '' ?>">
-                                <?= isset($_GET['step']) && $_GET['step'] == 1  ? '1 - Type de travaux' : '<a href="index.php?step=1">1 - Type de travaux</a>' ?>
-                            </li>
-                            <li class="breadcrumb-item <?= isset($_GET['step']) && $_GET['step'] == 2  ? 'active aria-current="page"' : '' ?>">
-                                <?= isset($_GET['step']) && $_GET['step'] == 2  ? '2 - Description des travaux' : '<a href="index.php?step=2">2 - Description des travaux</a>' ?>
-                            </li>
-                            <li class="breadcrumb-item <?= isset($_GET['step']) && $_GET['step'] == 3  ? 'active aria-current="page"' : '' ?>">
-                                <?= isset($_GET['step']) && $_GET['step'] == 3  ? '3 - Synthèse' : '<a href="index.php?step=3">3 - Synthèse</a>' ?>
-                            </li>
-                        </ol>
-                    </nav>
+                <!-- Fil d'Ariane -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item <?= isset($_GET['step']) && $_GET['step'] == 1  ? 'active aria-current="page"' : '' ?>">
+                            <?= isset($_GET['step']) && $_GET['step'] == 1  ? '1 - Type de travaux' : '<a href="index.php?step=1">1 - Type de travaux</a>' ?>
+                        </li>
+                        <li class="breadcrumb-item <?= isset($_GET['step']) && $_GET['step'] == 2  ? 'active aria-current="page"' : '' ?>">
+                            <?= isset($_GET['step']) && $_GET['step'] == 2  ? '2 - Description des travaux' : '<a href="index.php?step=2">2 - Description des travaux</a>' ?>
+                        </li>
+                        <li class="breadcrumb-item <?= isset($_GET['step']) && $_GET['step'] == 3  ? 'active aria-current="page"' : '' ?>">
+                            <?= isset($_GET['step']) && $_GET['step'] == 3  ? '3 - Synthèse' : '<a href="index.php?step=3">3 - Synthèse</a>' ?>
+                        </li>
+                    </ol>
+                </nav>
+                <!-- Fil d'Ariane -->
 
-                    <form action="index.php" method="POST">
+                <?php if (isset($_GET['step']) && $_GET['step'] == 1) { ?>
 
-                        <?php if (isset($_GET['step']) && $_GET['step'] == 1) { ?>
-                            <!-- ETAPE 1 -->
-                            <div class="border border-primary bg-primary step p-3">
-                                <h2 class="text-center mb-3">TYPE DE TRAVAUX</h2>
-                                <a href="index.php?step=2" class="d-block btn btn-outline-light btn-large fs-2 m-4"><i class="bi bi-bricks me-3"></i>Gros Oeuvre</a>
-                                <a href="index.php?step=2" class="d-block btn btn-outline-light btn-large fs-2 m-4"><i class="bi bi-paint-bucket me-3"></i>Second Oeuvre</a>
-                                <a href="index.php?step=2" class="d-block btn btn-outline-light btn-large fs-2 m-4"><i class="bi bi-scissors me-3"></i>Jardinage</a>
+                    <!-- DEBUT ETAPE 1 -->
+                    <div class="border border-primary bg-primary step p-3">
+                        <!-- bien rajouter un paramètre dans le action -->
+                        <h2 class="text-center mb-3">TYPE DE TRAVAUX</h2>
+                        <a href="index.php?step=2&type=1" class="d-block btn btn-outline-light btn-large fs-2 m-4"><i class="bi bi-bricks me-3"></i>Gros Oeuvre</a>
+                        <a href="index.php?step=2&type=2" class="d-block btn btn-outline-light btn-large fs-2 m-4"><i class="bi bi-paint-bucket me-3"></i>Second Oeuvre</a>
+                        <a href="index.php?step=2&type=3" class="d-block btn btn-outline-light btn-large fs-2 m-4"><i class="bi bi-scissors me-3"></i>Jardinage</a>
+                    </div>
+                    <!-- FIN ETAPE 1 -->
+
+                <?php } else if (isset($_GET['step']) && $_GET['step'] == 2) { ?>
+
+                    <!-- DEBUT ETAPE 2 -->
+                    <div class="border border-danger bg-danger text-white step p-3">
+                        <form action="index.php?step=3" method="POST">
+                            <h2 class="text-center mb-3)">DESCRIPTION DES TRAVAUX</h2>
+
+                            <!-- Nous vérifions que le type de travaux existe et qu'il est présent dans l'URL -->
+                            <?php if (isset($_GET['type']) && key_exists($_GET['type'], $sousType)) { ?>
+
+                                <label for="travaux" class="d-block">1 - Selectionnez les travaux à effectuer :</label>
+                                <select class="d-block" name="travaux" id="travaux">
+                                    <?php foreach ($sousType[$_GET['type']] as $key => $value) { ?>
+                                        <option value="<?= $key ?>"><?= $value ?></option>
+                                    <?php } ?>
+                                </select>
+
+                                <label for="size" class="d-block">2 - Estimation des la taille des travaux :</label>
+                                <input type="number" name="size" id="size">
+                                <select name="units" id="units">
+                                    <option>m</option>
+                                    <option>m2</option>
+                                    <option>m3</option>
+                                </select>
+
+                                <label for="description" class="d-block">3 - Description des travaux :</label>
+                                <textarea class="mb-2" name="description" id="description" cols="30" rows="10"></textarea>
+
+                            <?php } else { ?>
+                                <p>Veuillez sélectionner un type de travaux</p>
+                            <?php } ?>
+
+                            <div>
+                                <a href="index.php?step=1" class="btn btn-light">Précédent</a>
+                                <input type="submit" name="recap" class="btn btn-light" value="Suivant">
                             </div>
-                        <?php } else if (isset($_GET['step']) && $_GET['step'] == 2) { ?>
-                            <!-- ETAPE 2 -->
-                            <div class="border border-danger bg-danger step p-3">
-                                <h2 class="text-center mb-3)">DESCRIPTION DES TRAVAUX</h2>
-                            </div>
-                        <?php } else if (isset($_GET['step']) && $_GET['step'] == 3) { ?>
-                            <!-- ETAPE 3  -->
-                            <div class="border border-warning bg-warning step p-3">
-                                <h2 class="text-center mb-3">SYNTHESE</h2>
-                            </div>
-                        <?php } else { ?>
-                            <!-- CGU  -->
-                            <div class="border step p-3 text-center">
-                                <form action="" method="POST">
-                                    <h2 class="text-center mb-3">CGU</h2>
-                                    <p class="h4">Etes-vous ok pour tout ?</p>
-                                    <input type="checkbox" name="cgu" id="cgu">
-                                    <label for="cgu">J'accepte</label>
-                                    <button class="d-block mt-3 mx-auto btn btn-outline-secondary">Demande de devis</button>
-                                </form>
-                            </div>
-                        <?php } ?>
 
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                    <!-- FIN ETAPE 2 -->
 
+                <?php } else if (isset($_GET['step']) && $_GET['step'] == 3) { ?>
 
-            </form>
+                    <!-- DEBUT ETAPE 3  -->
+                    <div class="border border-warning bg-warning step p-3">
+                        <form action="index.php?step=4" method="POST">
+                            <h2 class="text-center mb-3">SYNTHESE</h2>
+
+                            <div>
+                                <a href="index.php?step=2" class="btn btn-light">Précédent</a>
+                            </div>
+
+                        </form>
+                    </div>
+                    <!-- FIN ETAPE 3  -->
+
+                <?php } else { ?>
+
+                    <!-- Début CGU  -->
+                    <div class="border step p-3 text-center">
+                        <form action="index.php?step=1" method="POST">
+                            <h2 class="text-center mb-3">CGU</h2>
+                            <p class="h4">Etes-vous ok pour tout ?</p>
+                            <input type="checkbox" name="cgu" id="cgu">
+                            <label for="cgu">J'accepte</label>
+                            <button class="d-block mt-3 mx-auto btn btn-outline-secondary">Demande de devis</button>
+                        </form>
+                    </div>
+                    <!-- Fin CGU  -->
+
+                <?php } ?>
+
+                <form action="index.php" method="POST">
+                    <input type="submit" name="cancel" class="btn btn-outline-secondary m-2" value="Annuler">
+                </form>
+            </div>
+
         </div>
 
     </div>
