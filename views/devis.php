@@ -36,14 +36,14 @@ require '../controllers/controller-devis.php';
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item<?= isset($_GET['step']) && $_GET['step'] == 1  ? ' active" aria-current="page' : '' ?>">
-                            <?= isset($_GET['step']) && $_GET['step'] == 1  ? '1 - Type de travaux' : '<a href="devis.php?step=1' . (isset($_GET['type']) ? "&type=". $_GET['type']: "") . '">1 - Type de travaux</a>' ?></li>
+                            <?= isset($_GET['step']) && $_GET['step'] == 1  ? '1 - Type de travaux' : '<a href="devis.php?step=1' . (isset($_GET['type']) ? "&type=" . $_GET['type'] : "") . '">1 - Type de travaux</a>' ?></li>
                         <li class="breadcrumb-item<?= isset($_GET['step']) && $_GET['step'] == 2  ? ' active" aria-current="page' : '' ?>">
-                            <?= isset($_GET['step']) && $_GET['step'] == 2  ? '2 - Description des travaux' : '<a href="devis.php?step=2' . (isset($_GET['type']) ? "&type=". $_GET['type']: "") . '">2 - Description des travaux</a>' ?></li>
+                            <?= isset($_GET['step']) && $_GET['step'] == 2  ? '2 - Description des travaux' : '<a href="devis.php?step=2' . (isset($_GET['type']) ? "&type=" . $_GET['type'] : "") . '">2 - Description des travaux</a>' ?></li>
                         <li class="breadcrumb-item<?= isset($_GET['step']) && $_GET['step'] == 3  ? ' active" aria-current="page' : '' ?>">
-                            <?= isset($_GET['step']) && $_GET['step'] == 3  ? '3 - Synthèse' : '<a href="devis.php?step=3' . (isset($_GET['type']) ? "&type=". $_GET['type']: "") . '">3 - Synthèse</a>' ?></li>
+                            <?= isset($_GET['step']) && $_GET['step'] == 3  ? '3 - Synthèse' : '<a href="devis.php?step=3' . (isset($_GET['type']) ? "&type=" . $_GET['type'] : "") . '">3 - Synthèse</a>' ?></li>
                     </ol>
                 </nav>
-                <!-- FinFil d'Ariane -->
+                <!-- Fin Fil d'Ariane -->
 
                 <?php if (isset($_GET['step']) && $_GET['step'] == 1) { ?>
 
@@ -106,6 +106,19 @@ require '../controllers/controller-devis.php';
                         <form action="devis.php?step=4" method="POST">
                             <h2 class="text-center mb-3">SYNTHESE</h2>
 
+                            <?php if (isset($_SESSION['travaux'])) { ?>
+                                <div class="border border-secondary rounded pt-2 m-2">
+                                    <ul>
+                                        <?php foreach ($_SESSION['travaux'][0] as $key => $value) { ?>
+                                            <li>Type : <?= $value['type'] ?></li>
+                                            <li>Travaux : <?= $value['travaux'] ?></li>
+                                            <li>Taille : <?= $value['size'], $value['units'] ?></li>
+                                            <li>Description : <?= $value['description'] ?></li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                            <?php } ?>
+
                             <div>
                                 <a href="devis.php?step=2&type=<?= $_GET['type'] ?>" class="btn btn-light">Précédent</a>
                             </div>
@@ -116,7 +129,7 @@ require '../controllers/controller-devis.php';
 
                 <?php } ?>
 
-                <form action="devis.php" method="POST">
+                <form action="cgu.php" method="POST">
                     <input type="submit" name="cancel" class="btn btn-outline-secondary m-2" value="Annuler">
                 </form>
             </div>

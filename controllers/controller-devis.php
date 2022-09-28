@@ -1,13 +1,27 @@
 <?php
 
-// Permet de valider la prise en compte des CGU, dans le cas échéant : retour
+
+var_dump($_POST);
+var_dump($_SESSION);
+
+// Permet de valider la prise en compte des CGU, dans le cas échéant : go cgu again
 if (!isset($_SESSION['travaux'])) {
     header('Location: cgu.php');
     exit;
 }
 
-var_dump($_POST);
-var_dump($_SESSION);
+// Permet de valider que nous démarrons sytematiquement en step 1 lorsque les paramètre step et type en sont pas présent (Safe Fil d'Ariane)
+if (!isset($_GET['step']) || ($_GET['step'] != 1 && !isset($_GET['type']))) {
+    header('Location: devis.php?step=1');
+    exit;
+}
+
+// tableau à générer via requête.
+$type = [
+    1 => 'Gros Oeuvre',
+    2 => 'Second Oeuvre',
+    3 => 'Jardinage'
+];
 
 // 1 Gros Oeuvre, 2 Second Oeuvre, 3 Jardin : tableau à générer via requête.
 $sousType = [
@@ -29,20 +43,6 @@ $sousType = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    // Nous detecton si la personne accepte les cgu pour demarrer les devis
-    if (isset($_POST['cgu']) && $_POST['cgu'] == true) {
-        $_SESSION['travaux'] = [];
-    }
-
-    // Si la personne annule via le bouton annuler
-    if (isset($_POST['cancel'])) {
-        // Je supprime la variable de session travaux
-        unset($_SESSION['travaux']);
-        // Puis retour au début du formulaire
-        header('Location: devis.php');
-        exit;
-    }
 
     // nous allons stocker toutes les infos dans la variable de session lors du submit recap :
     if (isset($_POST['recap'])) {
