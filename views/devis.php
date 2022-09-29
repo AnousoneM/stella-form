@@ -71,19 +71,17 @@ require '../controllers/controller-devis.php';
                                 <label for="travaux" class="d-block">1 - Selectionnez les travaux à effectuer :</label>
                                 <select class="d-block" name="travaux" id="travaux">
                                     <?php foreach ($sousType[$_GET['type']] as $key => $value) { ?>
-                                        <option value="<?= $key ?>" <?= isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['travaux'] == $key ? 'selected' : '' ?>><?= $value ?></option>
+                                        <option value="<?= $key ?>" <?= !isset($_SESSION['travaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['travaux'] == $key ? 'selected' : '' ?>><?= $value ?></option>
                                     <?php } ?>
                                 </select>
 
                                 <label for="size" class="d-block">2 - Estimation des la taille des travaux :</label>
                                 <input type="number" name="size" id="size" value="<?= $_SESSION['travaux'][$index]['size'] ?? '' ?>">
 
-                                <?php var_dump($_SESSION); ?>
-
                                 <select name="units" id="units">
-                                    <option <?= isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm' ? 'selected' : '' ?>>m</option>
-                                    <option <?= isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm2' ? 'selected' : '' ?>>m2</option>
-                                    <option <?= isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm3' ? 'selected' : '' ?>>m3</option>
+                                    <option <?= !isset($_SESSION['travaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm' ? 'selected' : '' ?>>m</option>
+                                    <option <?= !isset($_SESSION['travaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm2' ? 'selected' : '' ?>>m2</option>
+                                    <option <?= !isset($_SESSION['travaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm3' ? 'selected' : '' ?>>m3</option>
                                 </select>
 
                                 <label for="description" class="d-block">3 - Description des travaux :</label>
@@ -106,7 +104,7 @@ require '../controllers/controller-devis.php';
 
                     <!-- DEBUT ETAPE 3  -->
                     <div class="border border-warning bg-warning step p-3">
-                        <form action="devis.php?step=4" method="POST">
+                        <form action="devis.php?step=1" method="POST">
                             <h2 class="text-center mb-3">SYNTHESE</h2>
 
                             <?php if (isset($_SESSION['travaux'])) { ?>
@@ -122,7 +120,7 @@ require '../controllers/controller-devis.php';
                                 <?php } ?>
                             <?php } ?>
 
-                            <input type="submit" class="btn btn-dark" name="addTravaux" value="+ Travaux">
+                            <input type="submit" class="btn btn-dark" name="addTravaux" value="Ajout travaux">
 
                             <div>
                                 <a href="devis.php?step=2&type=<?= $_GET['type'] ?>" class="btn btn-light">Précédent</a>
