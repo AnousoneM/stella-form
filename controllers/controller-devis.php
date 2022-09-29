@@ -1,11 +1,7 @@
 <?php
 
-
-var_dump($_POST);
-var_dump($_SESSION);
-
 // Permet de valider la prise en compte des CGU, dans le cas échéant : go cgu again
-if (!isset($_SESSION['travaux'])) {
+if (!isset($_SESSION['cgu'])) {
     header('Location: cgu.php');
     exit;
 }
@@ -42,7 +38,32 @@ $sousType = [
     ]
 ];
 
+// Nous calculons le dernier Index de notre array $_SESSION
+if (isset($_SESSION['devisNb'])) {
+    $index = $_SESSION['devisNb'] - 1;
+} else {
+    $index = 0;
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    // Si la personne annule via le bouton annuler
+    if (isset($_POST['cancel'])) {
+        // Je supprime la variable de session travaux
+        unset($_SESSION['travaux']);
+        unset($_SESSION['cgu']);
+        unset($_SESSION['devisNb']);
+        header('Location: cgu.php');
+    }
+
+    // Si la personne annule via le bouton annuler
+    if (isset($_POST['addTravaux'])) {
+        // Je supprime la variable de session travaux
+        $_SESSION['devisNb'] = $index++;
+        header('Location: devis.php');
+    }
+
 
     // nous allons stocker toutes les infos dans la variable de session lors du submit recap :
     if (isset($_POST['recap'])) {
@@ -54,14 +75,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $description = htmlspecialchars($_POST['description']);
 
         // Nous vidons les infos actuels pour injecter les nouvelles infos
-        $_SESSION['travaux'] = [];
+        // $_SESSION['travaux'] = [];
 
-        // nous poussons les éléments dans la session afin de les conserver dans un tableau associatif
-        $_SESSION['travaux'] += ['type' => $type];
-        $_SESSION['travaux'] += ['travaux' => $travaux];
-        $_SESSION['travaux'] += ['size' => $size];
-        $_SESSION['travaux'] += ['units' => $units];
-        $_SESSION['travaux'] += ['description' => $description];
+        // Nous stockons toutes les infos dans un tableau
+        $travaux = [
+            'type' => $type,
+            'travaux' => $travaux,
+            'size' => $size,
+            'units' => $units,
+            'description' => $description
+        ];
+
+        // nous enregistrons les données sous forme de tableau dans la variable de session
+        $_SESSION['travaux'][$index] = $travaux;
+
         header('Location: devis.php?step=3&type=' . $_GET['type']);
         exit;
     }

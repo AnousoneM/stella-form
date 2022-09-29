@@ -71,20 +71,23 @@ require '../controllers/controller-devis.php';
                                 <label for="travaux" class="d-block">1 - Selectionnez les travaux à effectuer :</label>
                                 <select class="d-block" name="travaux" id="travaux">
                                     <?php foreach ($sousType[$_GET['type']] as $key => $value) { ?>
-                                        <option value="<?= $key ?>"><?= $value ?></option>
+                                        <option value="<?= $key ?>" <?= isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['travaux'] == $key ? 'selected' : '' ?>><?= $value ?></option>
                                     <?php } ?>
                                 </select>
 
                                 <label for="size" class="d-block">2 - Estimation des la taille des travaux :</label>
-                                <input type="number" name="size" id="size">
+                                <input type="number" name="size" id="size" value="<?= $_SESSION['travaux'][$index]['size'] ?? '' ?>">
+
+                                <?php var_dump($_SESSION); ?>
+
                                 <select name="units" id="units">
-                                    <option>m</option>
-                                    <option>m2</option>
-                                    <option>m3</option>
+                                    <option <?= isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm' ? 'selected' : '' ?>>m</option>
+                                    <option <?= isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm2' ? 'selected' : '' ?>>m2</option>
+                                    <option <?= isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm3' ? 'selected' : '' ?>>m3</option>
                                 </select>
 
                                 <label for="description" class="d-block">3 - Description des travaux :</label>
-                                <textarea class="mb-2" name="description" id="description" cols="30" rows="10"></textarea>
+                                <textarea class="mb-2" name="description" id="description" cols="30" rows="10"><?= $_SESSION['travaux'][$index]['description'] ?? '' ?></textarea>
 
                             <?php } else { ?>
                                 <p>Veuillez sélectionner un type de travaux</p>
@@ -107,17 +110,19 @@ require '../controllers/controller-devis.php';
                             <h2 class="text-center mb-3">SYNTHESE</h2>
 
                             <?php if (isset($_SESSION['travaux'])) { ?>
-                                <div class="border border-secondary rounded pt-2 m-2">
-                                    <ul>
-                                        <?php foreach ($_SESSION['travaux'][0] as $key => $value) { ?>
-                                            <li>Type : <?= $value['type'] ?></li>
-                                            <li>Travaux : <?= $value['travaux'] ?></li>
-                                            <li>Taille : <?= $value['size'], $value['units'] ?></li>
-                                            <li>Description : <?= $value['description'] ?></li>
-                                        <?php } ?>
-                                    </ul>
-                                </div>
+                                <?php foreach ($_SESSION['travaux'] as $key => $value) { ?>
+                                    <div class="border border-secondary rounded pt-3 m-2">
+                                        <ul>
+                                            <li><b>Type : </b><?= $type[$value['type']] ?></li>
+                                            <li><b>Travaux : </b><?= $sousType[$value['type']][$value['travaux']] ?></li>
+                                            <li><b>Taille : </b><?= $value['size'], $value['units'] ?></li>
+                                            <li><b>Description : </b><?= $value['description'] ?></li>
+                                        </ul>
+                                    </div>
+                                <?php } ?>
                             <?php } ?>
+
+                            <input type="submit" class="btn btn-dark" name="addTravaux" value="+ Travaux">
 
                             <div>
                                 <a href="devis.php?step=2&type=<?= $_GET['type'] ?>" class="btn btn-light">Précédent</a>
@@ -129,7 +134,7 @@ require '../controllers/controller-devis.php';
 
                 <?php } ?>
 
-                <form action="cgu.php" method="POST">
+                <form action="" method="POST">
                     <input type="submit" name="cancel" class="btn btn-outline-secondary m-2" value="Annuler">
                 </form>
             </div>
