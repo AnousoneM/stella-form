@@ -79,9 +79,9 @@ require '../controllers/controller-devis.php';
                                 <input type="number" name="size" id="size" value="<?= $_SESSION['travaux'][$index]['size'] ?? '' ?>">
 
                                 <select name="units" id="units">
-                                    <option <?= !isset($_SESSION['travaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm' ? 'selected' : '' ?>>m</option>
-                                    <option <?= !isset($_SESSION['travaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm2' ? 'selected' : '' ?>>m2</option>
-                                    <option <?= !isset($_SESSION['travaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm3' ? 'selected' : '' ?>>m3</option>
+                                    <option <?= !isset($_SESSION['addTravaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm' ? 'selected' : '' ?>>m</option>
+                                    <option <?= !isset($_SESSION['addTravaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm2' ? 'selected' : '' ?>>m2</option>
+                                    <option <?= !isset($_SESSION['addTravaux']) && isset($_SESSION['travaux']) && $_SESSION['travaux'][$index]['units'] == 'm3' ? 'selected' : '' ?>>m3</option>
                                 </select>
 
                                 <label for="description" class="d-block">3 - Description des travaux :</label>
